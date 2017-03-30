@@ -6,7 +6,10 @@
 clc; clear all; close all;
 
 %% Initializations
-numSurveyQuestions = 18;
+numSurveyQuestions = 18; % Int
+scores = zeros([1 numSurveyQuestions]); % Array
+scoresRemove = zeros([1 numSurveyQuestions]); % Array
+maxScores = cell(1,5); % Cell
 
 %% Define Survey Responses and Scores
 % Scores are based on a 1,2,3,4 : Will not attend, probably not attend,
@@ -36,16 +39,19 @@ Questions = {Question1 Question2 Question3 Question4 Question5 Question6 Questio
 
 % Store all scores separately
 for i = 1:numSurveyQuestions
-scores(i) = Questions{i}.Score;
+    scores(i) = Questions{i}.Score;
+    scoresRemove(i) = Questions{i}.Score;
 end
 
 % Find the top 5 scores from the survey results
 for j = 1:5
-    maxScore{j}.Score = max(scores);
+    maxScores{j}.Score = max(scoresRemove); % Max score
     for i = 1:numSurveyQuestions
-        if Questions{i}.Score == maxScore{j}.Score
-            maxScore{j}.Name = Questions{i}.Name;
+        if Questions{i}.Score == maxScores{j}.Score
+            maxScores{j}.Name = Questions{i}.Name; % Save question name corresponding to r max value
+            scoresRemove(i) = 0; % Remove this max value
         end
     end
+    numSurveyQuestions = numSurveyQuestions - 1;
 end
 
